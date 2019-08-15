@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Archiever</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="container">
+    <div class="widget">
+      <h1 class="title">Archiver</h1>
+    </div>
+    <div class="widget">
+      <label class="input-group input-group_layout_narrow">
+        <input class="input-group__input | text-input" type="text" inputmode="url" placeholder="Filename" name="filename" form="archive-form">
+        <span class="input-group__label | button">.zip</span>
+        <span class="input-group__tools">
+          <button class="button" type="submit" form="archive-form">get archive</button>
+        </span>
+      </label>
+    </div>
+
+    <form class="widget" name="archive-form" id="archive-form" method="post" action="/"></form>
+
+    <div class="widget | url-form-widget">
+      <form class="url-form" name="url-form">
+        <input class="url-form__input | text-input" type="text" inputmode="url" name="url" placeholder="http://some-site.com/some-file.txt">
+        <button class="url-form__submit | button" type="submit">add url</button>
+      </form>
+    </div>
+  </div>
+
+  <template id="input-group-template">
+    <div class="input-group">
+      <input class="input-group__input | text-input" type="text" inputmode="url" placeholder="url to file" name="url" form="archive-form" readonly>
+      <div class="input-group__tools">
+        <button class="delete-button" type="button" title="remove"></button>
+      </div>
+    </div>
+  </template>
+
+
+  <script src="main.js" async></script>
+</body>
+</html>
