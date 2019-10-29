@@ -27,7 +27,8 @@ class HttpResponseStream extends stream.Transform {
           return callback(error);
         };
         const extension = mime.getExtension(headers['content-type']);
-        callback(null, {
+        response.on('end', callback);
+        this.push({
           extension,
           url: chunk,
           stream: response
