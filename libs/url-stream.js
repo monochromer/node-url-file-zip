@@ -9,7 +9,8 @@ class UrlStream extends stream.Readable {
       }
     }
     super(options);
-    this.urls = options.urls.slice().reverse();
+    const urls = Array.isArray(options.urls) ? options.urls : [options.urls];
+    this.urls = urls.slice().reverse();
   }
 
   _read(size) {
