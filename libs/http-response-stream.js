@@ -17,6 +17,11 @@ class HttpResponseStream extends stream.Transform {
   }
 
   _transform(chunk, encoding, callback) {
+    function errorHandler(error) {
+      console.log(error);
+      callback();
+    }
+
     let { protocol } = url.parse(chunk);
     protocol = protocol.slice(0, -1);
     (protocol === 'https' ? https : http).get(chunk)
@@ -24,7 +29,7 @@ class HttpResponseStream extends stream.Transform {
         const { statusCode, headers } = response;
         if (statusCode !== 200) {
           const error = new Error(http.STATUS_CODES(statusCode));
-          return callback(error);
+          return errorHandler(error);
         };
         const extension = mime.getExtension(headers['content-type']);
         response.on('end', callback);
@@ -34,7 +39,7 @@ class HttpResponseStream extends stream.Transform {
           stream: response
         })
       })
-      .on('error', callback)
+      .on('error', errorHandler)
   }
 }
 
