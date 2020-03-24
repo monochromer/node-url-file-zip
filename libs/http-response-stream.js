@@ -28,7 +28,7 @@ class HttpResponseStream extends stream.Transform {
       .on('response', response => {
         const { statusCode, headers } = response;
         if (statusCode !== 200) {
-          const error = new Error(http.STATUS_CODES(statusCode));
+          const error = new Error(http.STATUS_CODES[statusCode]);
           return errorHandler(error);
         };
         const extension = mime.getExtension(headers['content-type']);
