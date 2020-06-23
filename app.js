@@ -12,12 +12,17 @@ app.use(express.static(config.public));
 app.post('/', express.urlencoded({ extended: true }), (req, res, next) => {
   const { filename, url } = req.body;
 
+  if (!filename && !url) {
+    res.status(400).end();
+    return;
+  }
+
   const archive = archiver('zip', {
     zlib: { level: 9 }
   });
 
   res.attachment(`${filename}.zip`);
-  res.on('close', () =>  archive.destroy());
+  res.on('close', () => archive.destroy());
   archive.on('error', next);
   archive.pipe(res);
   stream.pipeline(
