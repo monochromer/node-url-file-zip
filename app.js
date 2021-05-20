@@ -1,8 +1,8 @@
-const express = require('express');
 const stream = require('stream');
+const { randomUUID } = require('crypto');
+const express = require('express');
 const archiver = require('archiver');
 const config = require('./config/config');
-const UrlStream = require('./libs/url-stream');
 const HttpResponseStream = require('./libs/http-response-stream');
 
 const app = express();
@@ -17,16 +17,17 @@ app.post('/', express.urlencoded({ extended: true }), (req, res, next) => {
   });
 
   res.attachment(`${filename}.zip`);
-  res.on('close', () =>  archive.destroy());
+  req.on('aborted', () => fileStream.destroy());
   archive.on('error', next);
   archive.pipe(res);
+
   stream.pipeline(
-    new UrlStream({ urls: url }),
+    stream.Readable.from([...url]),
     new HttpResponseStream(),
-    error => { error && console.log(error) }
+    error => { error && next(error) }
   ).on('data', chunk => {
     archive.append(chunk.stream, {
-      name: `${Math.random().toString(16).slice(2)}.${chunk.extension}`
+      name: `${randomUUID()}.${chunk.extension}`
     })
   }).on('end', () => archive.finalize())
 });
